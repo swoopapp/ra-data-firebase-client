@@ -7,8 +7,8 @@
 /coverage
 
 # production
-build/
-es/
+# build/
+# es/
 
 # misc
 .DS_Store
