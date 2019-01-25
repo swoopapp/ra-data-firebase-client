@@ -1,4 +1,4 @@
-/* globals localStorage */
+/* globals localStorage test commit*/
 import { AUTH_LOGIN, AUTH_LOGOUT, AUTH_CHECK } from 'react-admin';
 import firebase from 'firebase';
 
