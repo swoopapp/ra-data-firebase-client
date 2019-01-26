@@ -113,7 +113,12 @@ var RestProvider = function RestProvider() {
   };
 
   var subscribeResource = function subscribeResource(ref, name, resolve) {
-    ref.orderByChild("affiliate").equalTo(affiliateToken).once('value', function (childSnapshot) {
+    if (!affiliateToken) {
+      var refAffiliateCheck = ref
+    } else {
+      var refAffiliateCheck = ref.orderByChild("affiliate").equalTo(affiliateToken)
+    };
+    refAffiliateCheck.once('value', function (childSnapshot) {
       /** Uses "value" to fetch initial data. Avoid the RA to show no results */
       if (childSnapshot.key === name) {
         var entries = childSnapshot.val() || {};
@@ -127,7 +132,7 @@ var RestProvider = function RestProvider() {
         resolve();
       }
     });
-    ref.orderByChild("affiliate").equalTo(affiliateToken).on('child_added', function (childSnapshot) {
+    refAffiliateCheck.on('child_added', function (childSnapshot) {
       resourcesData[name][childSnapshot.key] = firebaseGetFilter(_Object$assign({}, {
         id: childSnapshot.key,
         key: childSnapshot.key
