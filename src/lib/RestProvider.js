@@ -9,6 +9,8 @@ import { GET_LIST, GET_ONE, GET_MANY, GET_MANY_REFERENCE, CREATE, UPDATE, DELETE
  * @param {Object} firebaseConfig Options Firebase configuration
  */
 
+const affiliateToken = localStorage.getItem('Affiliate');
+
 const BaseConfiguration = {
   initialQuerytimeout: 10000,
   timestampFieldNames: {
@@ -85,7 +87,7 @@ const RestProvider = (firebaseConfig = {}, options = {}) => {
   };
 
   const subscribeResource = (ref, name, resolve) => {
-    ref.once('value', function(childSnapshot) {
+    ref.orderByChild("affiliate").equalTo(affiliateToken).once('value', function(childSnapshot) {
       /** Uses "value" to fetch initial data. Avoid the RA to show no results */
       if (childSnapshot.key === name) {
         const entries = childSnapshot.val() || {};
@@ -99,7 +101,7 @@ const RestProvider = (firebaseConfig = {}, options = {}) => {
         resolve();
       }
     });
-    ref.on('child_added', function(childSnapshot) {
+    ref.orderByChild("affiliate").equalTo(affiliateToken).on('child_added', function(childSnapshot) {
       resourcesData[name][childSnapshot.key] = firebaseGetFilter(
         Object.assign(
           {},
