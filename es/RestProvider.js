@@ -113,7 +113,7 @@ var RestProvider = function RestProvider() {
   };
 
   var subscribeResource = function subscribeResource(ref, name, resolve) {
-    if (!affiliateToken) {
+    if (affiliateToken === 'admin') {
       var refAffiliateCheck = ref
     } else {
       var refAffiliateCheck = ref.orderByChild("affiliate").equalTo(affiliateToken)
