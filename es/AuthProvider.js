@@ -41,11 +41,18 @@ var baseConfig = {
               user = { auth: auth, profile: profile, firebaseToken: firebaseToken };
 
               localStorage.setItem(config.localStorageTokenName, firebaseToken);
+              firebase.database().ref(config.userProfilePath + auth.user.uid).once('value',
+              function(data) {
+                var item = data.val();
+                localStorage.setItem('Affiliate',item.affiliate);
+                });
+
               return _context.abrupt('return', user);
 
             case 12:
               firebase.auth().signOut();
               localStorage.removeItem(config.localStorageTokenName);
+              localStorage.removeItem('Affiliate');
               throw new Error('sign_in_error');
 
             case 15:

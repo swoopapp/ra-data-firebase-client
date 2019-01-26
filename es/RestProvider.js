@@ -17,6 +17,8 @@ import { GET_LIST, GET_ONE, GET_MANY, GET_MANY_REFERENCE, CREATE, UPDATE, DELETE
  * @param {Object} firebaseConfig Options Firebase configuration
  */
 
+var affiliateToken = localStorage.getItem('Affiliate');
+ 
 var BaseConfiguration = {
   initialQuerytimeout: 10000,
   timestampFieldNames: {
@@ -111,7 +113,7 @@ var RestProvider = function RestProvider() {
   };
 
   var subscribeResource = function subscribeResource(ref, name, resolve) {
-    ref.once('value', function (childSnapshot) {
+    ref.orderByChild("affiliate").equalTo(affiliateToken).once('value', function (childSnapshot) {
       /** Uses "value" to fetch initial data. Avoid the RA to show no results */
       if (childSnapshot.key === name) {
         var entries = childSnapshot.val() || {};
@@ -125,7 +127,7 @@ var RestProvider = function RestProvider() {
         resolve();
       }
     });
-    ref.on('child_added', function (childSnapshot) {
+    ref.orderByChild("affiliate").equalTo(affiliateToken).on('child_added', function (childSnapshot) {
       resourcesData[name][childSnapshot.key] = firebaseGetFilter(_Object$assign({}, {
         id: childSnapshot.key,
         key: childSnapshot.key
